@@ -21,6 +21,10 @@ export class ItemsService {
     },
   ];
 
+  findOne(id): Item {
+    return this.items.find((item) => item.id === Number(id));
+  }
+
   findAll(): Item[] {
     return this.items;
   }
