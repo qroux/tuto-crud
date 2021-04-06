@@ -44,4 +44,11 @@ export class ItemsService {
 
     return updatedItem;
   }
+
+  delete(id: string): Item {
+    const itemToDelete = this.items.find((i) => i.id === Number(id));
+    this.items = this.items.filter((i) => i.id !== Number(id));
+
+    return itemToDelete;
+  }
 }
