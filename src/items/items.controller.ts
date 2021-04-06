@@ -1,4 +1,5 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
+import { CreateItemDto } from './dto/create-item.dto';
 import { Item } from './interfaces/item.interface';
 import { ItemsService } from './items.service';
 
@@ -14,5 +15,15 @@ export class ItemsController {
   @Get()
   findAll(): Item[] {
     return this.itemsService.findAll();
+  }
+
+  @Post()
+  create(@Body() newItem: CreateItemDto): Item {
+    return this.itemsService.create(newItem);
+  }
+
+  @Patch(':id')
+  update(@Param('id') id: string, @Body() newProperties: CreateItemDto) {
+    return this.itemsService.update(id, newProperties);
   }
 }
