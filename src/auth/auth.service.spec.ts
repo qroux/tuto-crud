@@ -1,18 +1,30 @@
+import * as request from 'supertest';
 import { Test, TestingModule } from '@nestjs/testing';
 import { AuthService } from './auth.service';
+import { INestApplication } from '@nestjs/common';
+import { AuthModule } from './auth.module';
 
 describe('AuthService', () => {
+  let app: INestApplication;
   let service: AuthService;
 
-  beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      providers: [AuthService],
-    }).compile();
+  beforeAll(async () => {
+    const moduleRef = await Test.createTestingModule({
+      imports: [AuthModule],
+    })
+      .overrideProvider(AuthService)
+      .useValue(AuthService)
+      .compile();
 
-    service = module.get<AuthService>(AuthService);
+    app = moduleRef.createNestApplication();
+    await app.init();
   });
 
-  it('should be defined', () => {
-    expect(service).toBeDefined();
+  it('Should return valid JWT token when user exists', async (done) => {
+    const response = await request(app.getHttpServer()).get('/auth/login');
+
+    expect(response.body).toEqual('truc');
+
+    done();
   });
 });
